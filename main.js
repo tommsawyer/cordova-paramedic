@@ -39,11 +39,11 @@ if (pathToParamedicConfig || // --config
 
     paramedic.run(paramedicConfig)
     .catch(function (error) {
-        console.log(JSON.stringify(error));
+        console.error(error.message);
         process.exit(1);
     })
-    .done(function (result) {
-        console.log(JSON.stringify(result));
+    .done(function(isTestPassed) {
+        process.exit(isTestPassed ? 0 : 1);
     });
 
 } else {

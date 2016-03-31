@@ -30,7 +30,7 @@ Paramedic.prototype.overrideConsole = function () {
         return function () {
             origConsole[type].apply(origConsole, arguments);
 
-            me.socket.emit('log', { type: type, msg: Array.prototype.slice.apply(arguments) });
+            me.socket.emit('deviceLog', { type: type, msg: Array.prototype.slice.apply(arguments) });
         };
     }
     window.console = {

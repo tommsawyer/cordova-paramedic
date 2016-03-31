@@ -1,5 +1,7 @@
 function JasmineParamedicProxy(socket) {
     this.socket = socket;
+    this.specExecuted = 0;
+    this.specFailed = 0;
     //jasmineRequire.JsApiReporter.apply(this, arguments);
 }
 
@@ -15,6 +17,14 @@ JasmineParamedicProxy.prototype.specStarted = function (o) {
 };
 
 JasmineParamedicProxy.prototype.specDone = function (o) {
+    if (o.status !== 'disabled') {
+        this.specExecuted++;
+    }
+    
+    if (o.status === 'failed') {
+        this.specFailed++;
+    }
+
     this.socket.emit('specDone', o);
 };
 
@@ -43,6 +53,12 @@ JasmineParamedicProxy.prototype.jasmineDone = function (o) {
         platform:(platformMap.hasOwnProperty(p) ? platformMap[p] : p),
         version:version,
         model:devmodel
+    }
+
+    // include common spec results
+    o.specResults = {
+        specExecuted : this.specExecuted,
+        specFailed   : this.specFailed
     }
 
     this.socket.emit('jasmineDone', o);
